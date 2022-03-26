@@ -4,5 +4,5 @@
 
 ### Authentication System
 
-    - [x] Register User
-    - [x] Login User
+- [x] Register User
+- [x] Login User
