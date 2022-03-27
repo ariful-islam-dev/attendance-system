@@ -2,6 +2,8 @@ const express = require("express");
 const connectDB = require("./db");
 const User = require("./models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const authenticate = require("./middleware/authenticate");
 
 const app = express();
 
@@ -66,7 +68,7 @@ app.post("/login", async (req, res, next) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch){
+    if (!isMatch) {
       return res.status(400).json({
         message: "Invalid Credential",
       });
@@ -74,12 +76,25 @@ app.post("/login", async (req, res, next) => {
 
     delete user._doc.password;
 
+    // Generate and return JWT
+    const token = await jwt.sign(user._doc, "secret-key", { expiresIn: "2h" });
+
     return res.status(200).json({
-      message: 'Login Successful', user
-    })
+      message: "Login Successful",
+      token,
+    });
   } catch (error) {
     next(error);
   }
+});
+
+app.get("/private" ,authenticate, async (req, res, next) => {
+  console.log(req.user);
+  return res.status(200).json({ message: "I am a private Route" });
+});
+
+app.get("/public", (req, res) => {
+  return res.status(200).json({ message: "I am a public Route" });
 });
 
 app.get("/", (req, res) => {
