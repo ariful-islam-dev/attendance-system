@@ -37,8 +37,10 @@ app.get("/", (req, res) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
+
+  
   console.log(err);
-  res.status(500).json({ message: "Server Error Occurs" });
+  res.status(err.status? err.status: 500).json({ message: err.message? err.message: "Server Error Occurs" });
 });
 
 connectDB("mongodb://localhost:27017/attendance-db")

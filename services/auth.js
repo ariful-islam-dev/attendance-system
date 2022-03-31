@@ -2,44 +2,38 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { findUserByProperty, createNewUser } = require("./user");
+const error = require("../utils/error");
 
 const registerService = async (name, email, password) => {
   let user = await findUserByProperty("email", email);
 
-  if (user) {
-    const error = new Error("User Already Exist");
-    error.status = 400;
-    throw error;
-  }
+  if (user) throw error("User Already Exist", 400);
 
   //Password Hash
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-
   return createNewUser({ name, email, password: hash });
 };
 
 const loginService = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await findUserByProperty("email", email);
 
-  if (!user) {
-    return res.status(400).json({
-      message: "Invalid Credential",
-    });
-  }
+  if (!user) throw error("Invalid Credential", 400);
 
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    return res.status(400).json({
-      message: "Invalid Credential",
-    });
-  }
+  if (!isMatch) throw error("Invalid Credential", 400);
 
-  delete user._doc.password;
+  const payload = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    roles: user.roles,
+    accountStatus: user.accountStatus,
+  };
 
   // Generate and return JWT
-  const token = await jwt.sign(user._doc, "secret-key", { expiresIn: "2h" });
+  return jwt.sign(payload, "secret-key", { expiresIn: "2h" });
 };
 
 module.exports = { registerService, loginService };
