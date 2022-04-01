@@ -27,7 +27,7 @@ router.patch("/:userId", () => {});
  * @method Delete
  */
 
-router.delete("/:userId", () => {});
+router.delete("/:userId", userController.deleteUserById);
 /**
  * Get all user, include
  * - filter
