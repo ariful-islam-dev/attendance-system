@@ -20,7 +20,7 @@ router.put("/:userId", () => {});
  * @method PATCH
  */
 
-router.patch("/:userId", () => {});
+router.patch("/:userId", userController.patchUserById);
 
  /**
  * delete user by id
