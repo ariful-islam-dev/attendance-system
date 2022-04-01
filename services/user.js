@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const error = require("../utils/error");
 
 const findUsers = () => {
   return User.find();
@@ -24,4 +25,13 @@ const createNewUser = ({ name, email, password, roles, accountStatus }) => {
 };
 
 
-module.exports = { findUserByProperty, createNewUser, findUsers };
+const updateUser = async(id, data)=>{
+
+  const user = await findUserByProperty("email", data.email)
+  if(user){
+    throw error("Email already in used", 400)
+  }
+  return User.findByIdAndUpdate(id, {...data}, {new: true})
+}
+
+module.exports = { findUserByProperty, createNewUser, findUsers, updateUser };

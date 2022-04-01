@@ -14,7 +14,7 @@ const router = require("express").Router();
  * @method PUT
  */
 
-router.put("/:userId", () => {});
+router.put("/:userId", userController.putUserById);
  /**
  * update user by id
  * @method PATCH
