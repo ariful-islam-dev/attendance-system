@@ -1,12 +1,9 @@
 const router = require('express').Router();
+const {getStudentAttendance, getStudentAttendanceStatus} = require('../Controllers/student-attendance')
 
-router.get('/status', (req, res)=>{
+router.get('/status', getStudentAttendanceStatus)
 
-})
-
-router.get('/', ()=>{
-    
-})
+router.get('/:id', getStudentAttendance)
 
 
 module.exports = router;

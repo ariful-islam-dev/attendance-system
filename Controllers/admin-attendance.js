@@ -1,4 +1,4 @@
-const AdminAttendance = require("../models/adminAtendance");
+const AdminAttendance = require("../models/AdminAttendance");
 const error = require("../utils/error");
 const { addMinutes, isAfter } = require("date-fns");
 

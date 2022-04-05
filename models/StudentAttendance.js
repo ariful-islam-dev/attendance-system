@@ -2,14 +2,16 @@ const { Schema, model } = require("mongoose");
 
 const studentAttendanceSchema = new Schema(
   {
-   userId:{
-       ref: 'User',
-       type: Schema.Types.ObjectId
-   },
-   adminAttendanceId:{
-       ref: 'AdminAttendance',
-       type: Schema.Types.ObjectId
-   }
+    user: {
+      ref: "User",
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    adminAttendance: {
+      ref: "AdminAttendance",
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
   },
   {
     timestamps: true,
